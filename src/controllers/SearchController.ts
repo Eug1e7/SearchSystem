@@ -3,7 +3,7 @@ import { BlockchainHashService } from "../services/BlockchainHashService";
 import { SearchService } from "../services/SearchService";
 import { ChatService } from "../services/ChatService";
 import { ExtractKeyPhrases } from "../services/ExtractKeyPhrases";
-
+import { KeyPhrasesVo } from "../Vo/KeyPhrasesVo";
 
 export const searchRouter = Router();
 
@@ -12,6 +12,7 @@ searchRouter.post("/search", async (req: Request, res: Response) => {
     const { word } = req.body;
     let response: any;
     let hash: string;
+    let keyPhrases: KeyPhrasesVo  = [];
     try {
         try {
             // ブロックチェーンのハッシュを生成
@@ -30,13 +31,13 @@ searchRouter.post("/search", async (req: Request, res: Response) => {
         }
         try {
             // キーフレーズ抽出&保存
-            await ExtractKeyPhrases.extractKeyPhrases(word, hash);
+            keyPhrases = await ExtractKeyPhrases.extractKeyPhrases(word, hash);
         } catch (error) {
             console.error("Error extracting key phrases:", error);
             return;
         }
         // データ保存
-        await SearchService.saveSearchWord(hash, word, response);
+        await SearchService.saveSearchWord(hash, word, response, keyPhrases);
         console.log(`Response ${response}, Word ${word}, hash ${hash}`);
         res.status(201).send(response);
     } catch (error) {

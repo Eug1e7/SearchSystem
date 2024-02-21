@@ -9,5 +9,5 @@ module.exports = {
     database: process.env.DB_NAME,
     entities: ["src/entity/**/*.ts"],
     synchronize: true,
-    logging: true,
+    logging: ["query", "error"],
 };
