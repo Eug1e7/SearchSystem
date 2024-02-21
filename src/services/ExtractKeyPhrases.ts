@@ -1,0 +1,41 @@
+import axios from "axios";
+
+export class ExtractKeyPhrases {
+    static async extractKeyPhrases(word: string, hash: string): Promise<{ text: string; score: number }[]> {
+        const Authorization = process.env.YAHOO_API_KEY;
+        const url = "https://jlp.yahooapis.jp/KeyphraseService/V2/extract?appid=" + Authorization;
+        const data = {
+            id: hash,
+            jsonrpc: "2.0",
+            method: "jlp.keyphraseservice.extract",
+            params: {
+                q: word,
+            },
+        };
+
+        try {
+            const response = await axios.post(url, data, {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            });
+
+            // レスポンスの構造を確認
+            if (response && response.data && response.data.result && response.data.result.phrases) {
+                const phrases = response.data.result.phrases;
+                const keyPhrases = phrases.map((phrase) => ({
+                    text: phrase.text,
+                    score: phrase.score,
+                }));
+                return keyPhrases;
+            } else {
+                // レスポンスの形式が期待と異なる場合
+                console.error("Unexpected response structure:", response);
+                return [];
+            }
+        } catch (error) {
+            console.error("Error making the API request:", error);
+            return [];
+        }
+    }
+}
