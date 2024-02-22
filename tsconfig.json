@@ -1,7 +1,11 @@
 {
     "compilerOptions": {
         "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
-        // その他の設定...
+        "emitDecoratorMetadata": true,
+        "sourceMap": true,
+        "outDir": "./dist",
+        "target": "es6",
+        "module": "commonjs",
+        "rootDir": "./src"
     }
 }

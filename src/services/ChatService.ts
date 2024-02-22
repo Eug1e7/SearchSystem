@@ -26,6 +26,11 @@ export class ChatService {
                 };
 
                 const response = await fetch(endPoint, requestOptions);
+                // HTTPステータスコードが200番台以外の場合はエラーとして扱う
+                if (!response.ok) {
+                    console.error("HTTP Error Response:", response.status, response.statusText);
+                    throw new Error(`HTTP Error: ${response.status} ${response.statusText}`);
+                }
                 const json = await response.json();
                 // レスポンスの構造をチェック
                 if (json.choices && json.choices.length > 0 && json.choices[0].message) {
@@ -34,7 +39,7 @@ export class ChatService {
 
                     // 「。」がある場合にそれを「。\n」に置換して改行を挿入
                     let modifiedContent = content.replace(/。/g, "。\n");
-                    
+
                     console.log(modifiedContent);
                     return modifiedContent;
                 } else {

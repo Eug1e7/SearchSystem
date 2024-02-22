@@ -27,7 +27,7 @@ export class ExtractKeyPhrases {
                 const keyPhrases: KeyPhrasesVo  = phrases.map((phrase) => ({
                     text: phrase.text,
                     score: phrase.score,
-                    id: hash,
+                    id: response.data,
                 }));
                 return keyPhrases;
             } else {

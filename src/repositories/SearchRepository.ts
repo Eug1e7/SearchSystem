@@ -1,7 +1,7 @@
-import { AppDataSource } from "../src/DataSource";
-import { KeyPhrasesVo } from "../src/Vo/KeyPhrasesVo";
-import { KeyWord } from "../src/entity/KeyWord";
-import { Search } from "../src/entity/Search";
+import { AppDataSource } from "../DataSource";
+import { KeyPhrasesVo } from "../Vo/KeyPhrasesVo";
+import { KeyWord } from "../entity/KeyWord";
+import { Search } from "../entity/Search";
 
 export class SearchRepository {
     static async save1(hash: string, word: string, response: string): Promise<void> {

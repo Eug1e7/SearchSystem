@@ -1,8 +1,8 @@
-import { SearchRepository } from "../../repositories/SearchRepository";
+import { SearchRepository } from "../repositories/SearchRepository";
 import { KeyPhrasesVo } from "../Vo/KeyPhrasesVo";
 
 export class SearchService {
-    static async saveSearchWord(hash: string, word: string, response: string, keyPhrases: KeyPhrasesVo ): Promise<void> {
+    static async saveSearchWord(hash: string, word: string, response: string, keyPhrases: KeyPhrasesVo): Promise<void> {
         // データ保存のロジック
         try {
             await SearchRepository.save1(hash, word, response);
