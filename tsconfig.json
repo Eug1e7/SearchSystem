@@ -7,5 +7,6 @@
         "target": "es6",
         "module": "commonjs",
         "rootDir": "./src"
-    }
+    },
+    "include": ["src/**/*"]
 }
