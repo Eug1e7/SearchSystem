@@ -12,7 +12,7 @@ searchRouter.post("/search", async (req: Request, res: Response) => {
     const { word } = req.body;
     let response: any;
     let hash: string;
-    let keyPhrases: KeyPhrasesVo  = [];
+    let keyPhrases: KeyPhrasesVo = [];
     try {
         try {
             // ブロックチェーンのハッシュを生成
