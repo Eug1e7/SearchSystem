@@ -1,4 +1,5 @@
 export class ChatService {
+    // GPT-3を使って検索
     static async searchGpt(word: string): Promise<any> {
         try {
             const sendChat = async (text, chatGptApiKey) => {

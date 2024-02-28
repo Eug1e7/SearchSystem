@@ -2,6 +2,7 @@ import { Block } from "../models/Block";
 import { Blockchain } from "../models/Blockchain";
 
 export class BlockchainHashService {
+    // hashを生成するためのBlockchainクラスのインスタンスを生成
     blockchain: Blockchain;
 
     constructor() {

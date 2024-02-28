@@ -2,6 +2,7 @@ import axios from "axios";
 import { KeyPhrasesVo } from "../Vo/KeyPhrasesVo";
 
 export class ExtractKeyPhrases {
+    // キーフレーズを抽出
     static async extractKeyPhrases(word: string, hash: string): Promise<KeyPhrasesVo > {
         const Authorization = process.env.YAHOO_API_KEY;
         const url = "https://jlp.yahooapis.jp/KeyphraseService/V2/extract?appid=" + Authorization;
