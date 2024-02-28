@@ -1,23 +1,14 @@
-import { SearchRepository } from "../repositories/SearchRepository";
-import { KeyPhrasesVo } from "../Vo/KeyPhrasesVo";
+import { BlockchainHashService } from "./BlockchainHashService";
+import { ChatService } from "./ChatService";
+import { ExtractKeyPhrases } from "./ExtractKeyPhrases";
+import { SaveService } from "./SaveService";
 
 export class SearchService {
-    static async saveSearchWord(hash: string, word: string, response: string, keyPhrases: KeyPhrasesVo): Promise<void> {
-        // データ保存のロジック
-        try {
-            await SearchRepository.save1(hash, word, response);
-            await SearchRepository.save2(keyPhrases);
-        } catch (error) {
-            console.error("Error saving data:", error);
-        }
-    }
-
-    static async getSearchWords(): Promise<string[]> {
-        // データ取得のロジック
-        try {
-            return await SearchRepository.findAll();
-        } catch (error) {
-            console.error("Error getting data:", error);
-        }
+    async performSearch(word) {
+        const hash = await new BlockchainHashService().generateBlockchainHash();
+        const response = await ChatService.searchGpt(word);
+        const keyPhrases = await ExtractKeyPhrases.extractKeyPhrases(word, hash);
+        await SaveService.saveSearchWord(hash, word, response, keyPhrases);
+        return { hash, response, keyPhrases }; // 必要なデータを返す
     }
 }
