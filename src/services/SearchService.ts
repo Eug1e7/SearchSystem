@@ -13,6 +13,6 @@ export class SearchService {
         const keyPhrases = await ExtractKeyPhrases.extractKeyPhrases(word, hash);
         // 検索履歴を保存
         await SaveService.saveSearchWord(hash, word, response, keyPhrases);
-        return { hash, response, keyPhrases }; // 必要なデータを返す
+        return { hash, response, keyPhrases };
     }
 }

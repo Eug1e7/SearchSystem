@@ -41,7 +41,7 @@ export class ChatService {
                     // 「。」がある場合にそれを「。\n」に置換して改行を挿入
                     let modifiedContent = content.replace(/。/g, "。\n");
 
-                    console.log(modifiedContent);
+                    // console.log(modifiedContent);
                     return modifiedContent;
                 } else {
                     // エラーメッセージまたは予期しないレスポンス構造をログに記録
@@ -50,7 +50,7 @@ export class ChatService {
                 }
             };
             const result = await sendChat(word, process.env.CHAT_GPT_API_KEY);
-            console.log(`Searching GPT for word: ${word}, Result: ${result}`);
+            // console.log(`Searching GPT for word: ${word}, Result: ${result}`);
             return result;
         } catch (error) {
             console.error("Error searching GPT:", error);
