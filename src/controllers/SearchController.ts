@@ -6,7 +6,7 @@ import { SearchService } from "../services/SearchService";
 
 export const searchRouter = Router();
 
-// 検索API
+// 登録API
 searchRouter.post("/search", async (req: Request, res: Response) => {
     const { word } = req.body;
     try {
