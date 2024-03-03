@@ -29,13 +29,21 @@ export class GetService {
         }
     }
 
-    // hashに対応するtextを取得
-    static async getScoreText(hashes: string[]): Promise<string[]> {
+    // score以上のtextを取得&重複を排除
+    static async getScoreText(score: number): Promise<string[]> {
         try {
-            const texts = await SearchRepository.findTexts(hashes);
-            return texts;
+            const texts = await SearchRepository.findTexts(score);
+            if (texts.length === 0) {
+                console.log("No texts found for the given score.");
+                return [];
+            }
+
+            // Setを使用して重複を排除し、再び配列に変換
+            const uniqueTexts = Array.from(new Set(texts));
+            return uniqueTexts;
         } catch (error) {
             console.error("Error getting data:", error);
+            return [];
         }
     }
 
@@ -47,5 +55,17 @@ export class GetService {
         } catch (error) {
             console.error("Error getting data:", error);
         }
+    }
+
+    // keywordを含むwordを取得
+    static async getWords(keyword: string): Promise<string[]> {
+        // keywordからhashを取得
+        const hashes = await SearchRepository.findHashesByKeyword(keyword);
+        // 重複を排除
+        const uniqueHashes = Array.from(new Set(hashes));
+
+        // hashからwordを取得
+        const words = await SearchRepository.findWords(uniqueHashes);
+        return words;
     }
 }

@@ -1,10 +1,9 @@
 import { GetService } from "./GetService";
 
 export class GetScoreKeywordService {
-    // スコア以上のhashを取得
+    // Score以上のtextを取得
     static async sortTextScore(score: number): Promise<string[]> {
-        const hashes = await GetService.getScoreHash(score);
-        const texts = await GetService.getScoreText(hashes);
+        const texts = await GetService.getScoreText(score);
         return texts;
     }
 }

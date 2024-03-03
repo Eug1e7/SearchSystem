@@ -65,3 +65,21 @@ searchRouter.get("/score_word", async (req: Request, res: Response) => {
         res.status(500).send(error.message);
     }
 });
+
+// keywordを含むwordを取得
+searchRouter.get("/word", async (req: Request, res: Response) => {
+    // クエリパラメータからkeywordを取得
+    const keyword = req.query.keyword as string;
+
+    // keywordが存在するか確認
+    if (!keyword) {
+        return res.status(400).send("Keyword parameter is required.");
+    }
+
+    try {
+        const words = await GetService.getWords(keyword);
+        res.status(200).send(words);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});

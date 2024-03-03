@@ -50,13 +50,12 @@ export class SearchRepository {
         const hashes = await queryBuilder.getRawMany();
         // console.log("Hashes:", hashes);
         return hashes.map((hash) => hash.keyword_hash);
-
     }
 
-    // hashに対応するtextを取得
-    static async findTexts(hashes: string[]): Promise<string[]> {
+    // score以上のtextを取得
+    static async findTexts(score: number): Promise<string[]> {
         const keywordRepository = AppDataSource.getRepository(KeyWord);
-        const queryBuilder = keywordRepository.createQueryBuilder("keyword").select("keyword.text").where("keyword.hash IN (:...hashes)", { hashes });
+        const queryBuilder = keywordRepository.createQueryBuilder("keyword").select("keyword.text").where("keyword.score >= :score", { score });
 
         const sql = queryBuilder.getSql();
         const parameters = queryBuilder.getParameters();
@@ -65,6 +64,23 @@ export class SearchRepository {
         const texts = await queryBuilder.getRawMany();
         // console.log("Texts:", texts);
         return texts.map((text) => text.keyword_text);
+    }
+
+    // keywordからhashを取得
+    static async findHashesByKeyword(keyword: string): Promise<string[]> {
+        const keywordRepository = AppDataSource.getRepository(KeyWord);
+        const queryBuilder = keywordRepository
+            .createQueryBuilder("keyword")
+            .select("keyword.hash")
+            .where("LOWER(keyword.text) LIKE LOWER(:keyword)", { keyword: `%${keyword}%` });
+
+        const sql = queryBuilder.getSql();
+        const parameters = queryBuilder.getParameters();
+        console.log("Executing SQL:", sql, "with parameters:", parameters);
+
+        const hashes = await queryBuilder.getRawMany();
+        console.log("Hashes:", hashes);
+        return hashes.map((hash) => hash.keyword_hash);
     }
 
     // hashに対応するwordを取得
