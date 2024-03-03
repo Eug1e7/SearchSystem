@@ -21,7 +21,7 @@ searchRouter.post("/search", async (req: Request, res: Response) => {
 });
 
 // 検索履歴を取得
-searchRouter.get("/searches", async (req: Request, res: Response) => {
+searchRouter.get("/searches", async (res: Response) => {
     try {
         const searches = await GetService.getSearchWords();
         res.status(200).send(searches);
