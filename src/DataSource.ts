@@ -1,3 +1,5 @@
+// Search-system\SearchSystemAPI\src\DataSource.ts
+
 import "dotenv/config";
 import { DataSource } from "typeorm";
 import { KeyWord } from "./entity/KeyWord";
