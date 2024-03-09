@@ -1,6 +1,6 @@
 // Search-system\SearchSystemAPI\src\services\SearchService.ts
 import { KeyPhrasesVo } from "../Vo/KeyPhrasesVo";
-import { SaveSearchWordInVo } from "../Vo/SaveSearchWordInVo";
+import { SaveSearchQuestionInVo } from "../Vo/SaveSearchQuestionInVo";
 import { BlockchainHashService } from "./BlockchainHashService";
 import { ChatService } from "./ChatService";
 import { ExtractKeyPhrases } from "./ExtractKeyPhrases";
@@ -19,8 +19,8 @@ export class SearchService {
         // 理解度スコアを取得
         const understandingScore: number = await ChatService.getUnderstandingScore(question, keyPhrases);
         // 検索履歴を保存
-        const saveSearchWordInVo: SaveSearchWordInVo = { hash, question, response};
-        await SaveService.saveSearchWord(createdAt, saveSearchWordInVo, keyPhrases, understandingScore);
+        const saveSearchQuestionInVo: SaveSearchQuestionInVo = { hash, question, response };
+        await SaveService.saveSearchQuestion(createdAt, saveSearchQuestionInVo, keyPhrases, understandingScore);
         return { hash, response, keyPhrases };
     }
 }

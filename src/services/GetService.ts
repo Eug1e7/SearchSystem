@@ -3,7 +3,7 @@ import { SearchRepository } from "../repositories/SearchRepository";
 // データ取得のロジックを記述
 export class GetService {
     // 検索履歴を取得
-    static async getSearchWords(): Promise<string[]> {
+    static async getSearchQuestions(): Promise<string[]> {
         try {
             return await SearchRepository.findAll();
         } catch (error) {
@@ -47,25 +47,25 @@ export class GetService {
         }
     }
 
-    // hashに対応するwordを取得
-    static async getScoreWords(hashes: string[]): Promise<string[]> {
+    // hashに対応するQuestionを取得
+    static async getScoreQuestions(hashes: string[]): Promise<string[]> {
         try {
-            const words = await SearchRepository.findWords(hashes);
-            return words;
+            const Question = await SearchRepository.findQuestions(hashes);
+            return Question;
         } catch (error) {
             console.error("Error getting data:", error);
         }
     }
 
-    // keywordを含むwordを取得
-    static async getWords(keyword: string): Promise<string[]> {
+    // keywordを含むquestionを取得
+    static async getQuestions(keyword: string): Promise<string[]> {
         // keywordからhashを取得
         const hashes = await SearchRepository.findHashesByKeyword(keyword);
         // 重複を排除
         const uniqueHashes = Array.from(new Set(hashes));
 
-        // hashからwordを取得
-        const words = await SearchRepository.findWords(uniqueHashes);
-        return words;
+        // hashからquestionを取得
+        const questions = await SearchRepository.findQuestions(uniqueHashes);
+        return questions;
     }
 }

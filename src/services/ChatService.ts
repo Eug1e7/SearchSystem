@@ -7,7 +7,7 @@ export class ChatService {
         try {
             const sendChat = async (text, chatGptApiKey) => {
                 const endPoint = "https://api.openai.com/v1/chat/completions";
-                const modelName = "gpt-3.5-turbo";
+                const modelName = "gpt-3.5-turbo-0125";
 
                 const messages = [
                     {
@@ -93,7 +93,7 @@ export class ChatService {
             const rating = jsonResponse.choices[0].text.trim();
 
             // ChatGPTの応答から得られた評価スコア（1から5の評価）
-            let score:number = parseInt(rating, 10);
+            let score: number = parseInt(rating, 10);
 
             // 応答が無効なスコアを返した場合（NaNなど）、デフォルト値を設定
             if (isNaN(score) || score < 1 || score > 5) {

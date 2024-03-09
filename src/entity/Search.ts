@@ -9,7 +9,7 @@ export class Search {
     hash: string;
 
     @Column()
-    word: string;
+    question: string;
 
     @Column()
     response: string;

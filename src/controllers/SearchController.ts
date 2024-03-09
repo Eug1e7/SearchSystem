@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import { GetScoreKeywordService } from "../services/GetScoreKeywordService";
-import { GetScoreWordService } from "../services/GetScoreWordService";
+import { GetScoreQuestionService } from "../services/GetScoreQuestionService";
 import { GetService } from "../services/GetService";
 import { SearchService } from "../services/SearchService";
 
@@ -8,10 +8,10 @@ export const searchRouter = Router();
 
 // 登録API
 searchRouter.post("/search", async (req: Request, res: Response) => {
-    const { word } = req.body;
+    const { question } = req.body;
     try {
         const searchService = new SearchService();
-        const result = await searchService.performSearch(word);
+        const result = await searchService.performSearch(question);
         console.log(`Result: `, result);
         res.status(201).send(result.response);
     } catch (error) {
@@ -23,7 +23,7 @@ searchRouter.post("/search", async (req: Request, res: Response) => {
 // 検索履歴を取得
 searchRouter.get("/searches", async (res: Response) => {
     try {
-        const searches = await GetService.getSearchWords();
+        const searches = await GetService.getSearchQuestions();
         res.status(200).send(searches);
     } catch (error) {
         res.status(500).send(error.message);
@@ -48,8 +48,8 @@ searchRouter.get("/score_text", async (req: Request, res: Response) => {
     }
 });
 
-// Score以上のtextを含むwordを取得
-searchRouter.get("/score_word", async (req: Request, res: Response) => {
+// Score以上のtextを含むquestionを取得
+searchRouter.get("/score_question", async (req: Request, res: Response) => {
     // クエリパラメータからスコアを取得し、数値に変換
     const score = parseInt(req.query.score as string, 10);
 
@@ -59,15 +59,15 @@ searchRouter.get("/score_word", async (req: Request, res: Response) => {
     }
 
     try {
-        const words = await GetScoreWordService.sortWordScore(score);
-        res.status(200).send(words);
+        const questions = await GetScoreQuestionService.sortQuestionScore(score);
+        res.status(200).send(questions);
     } catch (error) {
         res.status(500).send(error.message);
     }
 });
 
-// keywordを含むwordを取得
-searchRouter.get("/word", async (req: Request, res: Response) => {
+// keywordを含むquestionを取得
+searchRouter.get("/question", async (req: Request, res: Response) => {
     // クエリパラメータからkeywordを取得
     const keyword = req.query.keyword as string;
 
@@ -77,8 +77,8 @@ searchRouter.get("/word", async (req: Request, res: Response) => {
     }
 
     try {
-        const words = await GetService.getWords(keyword);
-        res.status(200).send(words);
+        const questions = await GetService.getQuestions(keyword);
+        res.status(200).send(questions);
     } catch (error) {
         res.status(500).send(error.message);
     }

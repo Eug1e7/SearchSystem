@@ -1,21 +1,21 @@
 import { AppDataSource } from "../DataSource";
 import { KeyPhrasesVo } from "../Vo/KeyPhrasesVo";
-import { SaveSearchWordInVo } from "../Vo/SaveSearchWordInVo";
+import { SaveSearchQuestionInVo } from "../Vo/SaveSearchQuestionInVo";
 import { KeyWord } from "../entity/KeyWord";
 import { Search } from "../entity/Search";
 
 export class SearchRepository {
     // 検索結果を保存
-    static async save1(saveSearchWordInVo: SaveSearchWordInVo, createdAt: Date, understandingScore: number): Promise<void> {
+    static async save1(saveSearchQuestionInVo: SaveSearchQuestionInVo, createdAt: Date, understandingScore: number): Promise<void> {
         try {
-            const saveSearchWord = {
-                hash: saveSearchWordInVo.hash,
-                word: saveSearchWordInVo.question,
-                response: saveSearchWordInVo.response,
+            const saveSearchQuestion = {
+                hash: saveSearchQuestionInVo.hash,
+                question: saveSearchQuestionInVo.question,
+                response: saveSearchQuestionInVo.response,
                 score: understandingScore,
                 createdAt: createdAt,
             };
-            const queryBuilder = AppDataSource.createQueryBuilder().insert().into(Search).values([saveSearchWord]);
+            const queryBuilder = AppDataSource.createQueryBuilder().insert().into(Search).values([saveSearchQuestion]);
             const sql = queryBuilder.getSql();
             const parameters = queryBuilder.getParameters();
             console.log("Executing SQL:", sql, "with parameters:", parameters);
@@ -43,7 +43,7 @@ export class SearchRepository {
     static async findAll(): Promise<string[]> {
         const searchRepository = AppDataSource.getRepository(Search);
         const searches = await searchRepository.find();
-        return searches.map((search) => search.word);
+        return searches.map((search) => search.question);
     }
 
     // スコア以上のhashを取得
