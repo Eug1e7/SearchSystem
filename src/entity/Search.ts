@@ -13,4 +13,10 @@ export class Search {
 
     @Column()
     response: string;
+
+    @Column()
+    score: number;
+
+    @Column()
+    createdAt: Date;
 }

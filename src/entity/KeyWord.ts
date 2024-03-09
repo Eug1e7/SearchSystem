@@ -13,4 +13,7 @@ export class KeyWord {
 
     @Column()
     score: number;
+
+    @Column()
+    createdAt: Date;
 }

@@ -1,13 +1,21 @@
 import { AppDataSource } from "../DataSource";
 import { KeyPhrasesVo } from "../Vo/KeyPhrasesVo";
+import { SaveSearchWordInVo } from "../Vo/SaveSearchWordInVo";
 import { KeyWord } from "../entity/KeyWord";
 import { Search } from "../entity/Search";
 
 export class SearchRepository {
     // 検索結果を保存
-    static async save1(hash: string, word: string, response: string): Promise<void> {
+    static async save1(saveSearchWordInVo: SaveSearchWordInVo, createdAt: Date, understandingScore: number): Promise<void> {
         try {
-            const queryBuilder = AppDataSource.createQueryBuilder().insert().into(Search).values([{ hash, word, response }]);
+            const saveSearchWord = {
+                hash: saveSearchWordInVo.hash,
+                word: saveSearchWordInVo.question,
+                response: saveSearchWordInVo.response,
+                score: understandingScore,
+                createdAt: createdAt,
+            };
+            const queryBuilder = AppDataSource.createQueryBuilder().insert().into(Search).values([saveSearchWord]);
             const sql = queryBuilder.getSql();
             const parameters = queryBuilder.getParameters();
             console.log("Executing SQL:", sql, "with parameters:", parameters);
@@ -18,9 +26,9 @@ export class SearchRepository {
     }
 
     // キーワードを保存
-    static async save2(keyPhrases: KeyPhrasesVo): Promise<void> {
+    static async save2(keyPhrases: KeyPhrasesVo, createdAt: Date): Promise<void> {
         try {
-            const keywordValues = keyPhrases.map((kp) => ({ hash: kp.hash, text: kp.text, score: kp.score }));
+            const keywordValues = keyPhrases.map((kp) => ({ hash: kp.hash, text: kp.text, score: kp.score, createdAt }));
             const queryBuilder = AppDataSource.createQueryBuilder().insert().into(KeyWord).values(keywordValues);
             const sql = queryBuilder.getSql();
             const parameters = queryBuilder.getParameters();
@@ -83,17 +91,17 @@ export class SearchRepository {
         return hashes.map((hash) => hash.keyword_hash);
     }
 
-    // hashに対応するwordを取得
-    static async findWords(hashes: string[]): Promise<string[]> {
+    // hashに対応するquestionを取得
+    static async findQuestions(hashes: string[]): Promise<string[]> {
         const searchRepository = AppDataSource.getRepository(Search);
-        const queryBuilder = searchRepository.createQueryBuilder("word").select("word.word").where("word.hash IN (:...hashes)", { hashes });
+        const queryBuilder = searchRepository.createQueryBuilder("question").select("question.question").where("question.hash IN (:...hashes)", { hashes });
 
         const sql = queryBuilder.getSql();
         const parameters = queryBuilder.getParameters();
         console.log("Executing SQL:", sql, "with parameters:", parameters);
 
-        const words = await queryBuilder.getRawMany();
-        // console.log("Words:", words);
-        return words.map((word) => word.word_word);
+        const questions = await queryBuilder.getRawMany();
+        // console.log("Questions:", questions);
+        return questions.map((question) => question.question_question);
     }
 }

@@ -1,9 +1,10 @@
+// Search-system\SearchSystemAPI\src\services\ExtractKeyPhrases.ts
 import axios from "axios";
 import { KeyPhrasesVo } from "../Vo/KeyPhrasesVo";
 
 export class ExtractKeyPhrases {
     // キーフレーズを抽出
-    static async extractKeyPhrases(word: string, hash: string): Promise<KeyPhrasesVo > {
+    static async extractKeyPhrases(question: string, hash: string): Promise<KeyPhrasesVo > {
         const Authorization = process.env.YAHOO_API_KEY;
         const url = "https://jlp.yahooapis.jp/KeyphraseService/V2/extract?appid=" + Authorization;
         const data = {
@@ -11,7 +12,7 @@ export class ExtractKeyPhrases {
             jsonrpc: "2.0",
             method: "jlp.keyphraseservice.extract",
             params: {
-                q: word,
+                q: question,
             },
         };
 
