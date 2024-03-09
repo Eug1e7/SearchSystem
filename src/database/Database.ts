@@ -1,3 +1,5 @@
+// Search-system\SearchSystemAPI\src\database\Database.ts
+
 import * as mysql from "mysql2/promise";
 import * as dotenv from 'dotenv';
 
