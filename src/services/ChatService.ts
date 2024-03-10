@@ -52,7 +52,7 @@ export class ChatService {
                     throw new Error("Unexpected response structure.");
                 }
             };
-            const result = await sendChat(question, process.env.CHAT_GPT_API_KEY);
+            const result = await sendChat(question, process.env.OPENAI_API_KEY);
             // console.log(`Searching GPT for question: ${question}, Result: ${result}`);
             return result;
         } catch (error) {
@@ -65,7 +65,7 @@ export class ChatService {
     static async getUnderstandingScore(question: string, keyPhrases: KeyPhrasesVo): Promise<any> {
         const endpoint = "https://api.openai.com/v1/completions";
         const apiKey = process.env.OPENAI_API_KEY;
-        const modelName = "text-davinci-003";
+        const modelName = "gpt-3.5-turbo-0125";
 
         let scores = [];
 
