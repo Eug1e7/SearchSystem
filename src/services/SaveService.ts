@@ -6,6 +6,10 @@ export class SaveService {
         // データ保存のロジック
         try {
             await SearchRepository.save1(saveSearchQuestionInVo, createdAt, understandingScore);
+        } catch (error) {
+            console.error("Error saving data:", error);
+        }
+        try {
             await SearchRepository.save2(keyPhrases, createdAt);
         } catch (error) {
             console.error("Error saving data:", error);
