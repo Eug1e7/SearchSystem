@@ -70,7 +70,17 @@ export class ChatService {
         let scores = [];
 
         for (const keyPhrase of keyPhrases) {
-            const prompt = `Given the question: "${question}" and the topic: "${keyPhrase.text}", rate the depth of understanding exhibited in the question on a scale from 1 to 5, where 1 is very abstract with little understanding, and 5 is highly detailed and expert-level understanding.`;
+            // messages配列の生成
+            const messages = [
+                {
+                    role: "system",
+                    content: `Given the question and the topic, rate the depth of understanding exhibited in the question on a scale from 1 to 5, where 1 is very abstract with little understanding, and 5 is highly detailed and expert-level understanding.`,
+                },
+                {
+                    role: "user",
+                    content: `Question: "${question}" Topic: "${keyPhrase.text}"`,
+                },
+            ];
 
             const response = await fetch(endpoint, {
                 method: "POST",
@@ -80,7 +90,7 @@ export class ChatService {
                 },
                 body: JSON.stringify({
                     model: modelName,
-                    prompt: prompt,
+                    messages: messages,
                     temperature: 0.7,
                     max_tokens: 150,
                     top_p: 1.0,
@@ -90,7 +100,7 @@ export class ChatService {
             });
 
             const jsonResponse = await response.json();
-            const rating = jsonResponse.choices[0].text.trim();
+            const rating = jsonResponse.choices[0].message.content.trim();
 
             // ChatGPTの応答から得られた評価スコア（1から5の評価）
             let score: number = parseInt(rating, 10);
