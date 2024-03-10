@@ -63,7 +63,7 @@ export class ChatService {
 
     // 理解度スコアを取得
     static async getUnderstandingScore(question: string, keyPhrases: KeyPhrasesVo): Promise<any> {
-        const endpoint = "https://api.openai.com/v1/completions";
+        const endpoint = "https://api.openai.com/v1/chat/completions";
         const apiKey = process.env.OPENAI_API_KEY;
         const modelName = "gpt-3.5-turbo-0125";
 
