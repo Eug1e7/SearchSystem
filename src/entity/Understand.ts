@@ -1,7 +1,9 @@
+// Search-system\SearchSystemAPI\src\entity\Understand.ts
+
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Search {
+export class Understand {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -9,10 +11,7 @@ export class Search {
     hash: string;
 
     @Column()
-    question: string;
-
-    @Column()
-    response: string;
+    understandingScore: number;
 
     @Column()
     createdAt: Date;

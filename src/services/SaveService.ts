@@ -1,18 +1,20 @@
+// Search-system\SearchSystemAPI\src\services\SaveService.ts
+
 import { SearchRepository } from "../repositories/SearchRepository";
 
 export class SaveService {
-    // 検索履歴を保存
-    static async saveSearchQuestion(createdAt, saveSearchQuestionInVo, keyPhrases, understandingScore): Promise<void> {
-        // データ保存のロジック
+    static async saveSearchQuestion(createdAt, saveSearchQuestionInVo, keyPhrases, saveUnderstand): Promise<void> {
         try {
-            await SearchRepository.save1(saveSearchQuestionInVo, createdAt, understandingScore);
+            const result = await SearchRepository.executeTransaction(saveSearchQuestionInVo, keyPhrases, saveUnderstand, createdAt);
+            if (result !== "") {
+                console.error(result);
+                // エラーメッセージが返された場合は、処理をここで停止します。
+                // 必要に応じて、さらに適切なエラー処理を行うこともできます。
+            }
         } catch (error) {
-            console.error("Error saving data:", error);
-        }
-        try {
-            await SearchRepository.save2(keyPhrases, createdAt);
-        } catch (error) {
-            console.error("Error saving data:", error);
+            console.error("Error during saveSearchQuestion:", error);
+            // エラーが発生した場合の処理をここに記述します。
+            // 例えば、エラーメッセージをログに記録する、エラー応答をクライアントに送信するなどです。
         }
     }
 }

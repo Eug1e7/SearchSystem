@@ -1,41 +1,49 @@
+// Search-system\SearchSystemAPI\src\repositories\SearchRepository.ts
+
 import { AppDataSource } from "../DataSource";
 import { KeyPhrasesVo } from "../Vo/KeyPhrasesVo";
 import { SaveSearchQuestionInVo } from "../Vo/SaveSearchQuestionInVo";
 import { KeyWord } from "../entity/KeyWord";
 import { Search } from "../entity/Search";
+import { Understand } from "../entity/Understand";
 
 export class SearchRepository {
-    // 検索結果を保存
-    static async save1(saveSearchQuestionInVo: SaveSearchQuestionInVo, createdAt: Date, understandingScore: number): Promise<void> {
+    static async executeTransaction(saveSearchQuestionInVo: SaveSearchQuestionInVo, keyPhrases: KeyPhrasesVo, saveUnderstand, createdAt: Date): Promise<string> {
         try {
-            const saveSearchQuestion = {
-                hash: saveSearchQuestionInVo.hash,
-                question: saveSearchQuestionInVo.question,
-                response: saveSearchQuestionInVo.response,
-                score: understandingScore,
-                createdAt: createdAt,
-            };
-            const queryBuilder = AppDataSource.createQueryBuilder().insert().into(Search).values([saveSearchQuestion]);
-            const sql = queryBuilder.getSql();
-            const parameters = queryBuilder.getParameters();
-            console.log("Executing SQL:", sql, "with parameters:", parameters);
-            await queryBuilder.execute();
-        } catch (error) {
-            console.error("Error saving data:", error);
-        }
-    }
+            await AppDataSource.transaction(async (transactionalEntityManager) => {
+                // save1のロジック
+                const saveSearchQuestion = new Search();
+                saveSearchQuestion.hash = saveSearchQuestionInVo.hash;
+                saveSearchQuestion.question = saveSearchQuestionInVo.question;
+                saveSearchQuestion.response = saveSearchQuestionInVo.response;
+                saveSearchQuestion.createdAt = createdAt;
+                await transactionalEntityManager.save(saveSearchQuestion);
 
-    // キーワードを保存
-    static async save2(keyPhrases: KeyPhrasesVo, createdAt: Date): Promise<void> {
-        try {
-            const keywordValues = keyPhrases.map((kp) => ({ hash: kp.hash, text: kp.text, score: kp.score, createdAt }));
-            const queryBuilder = AppDataSource.createQueryBuilder().insert().into(KeyWord).values(keywordValues);
-            const sql = queryBuilder.getSql();
-            const parameters = queryBuilder.getParameters();
-            console.log("Executing SQL:", sql, "with parameters:", parameters);
-            await queryBuilder.execute();
+                // save2のロジック
+                const keywordValues = keyPhrases.map((kp) => {
+                    let keyword = new KeyWord();
+                    keyword.hash = kp.hash;
+                    keyword.text = kp.text;
+                    keyword.score = kp.score;
+                    keyword.createdAt = createdAt;
+                    return keyword;
+                });
+                await transactionalEntityManager.save(keywordValues);
+
+                // save3のロジック
+                const understandValues = saveUnderstand.understandingScores.map(score => {
+                    const understand = new Understand();
+                    understand.hash = saveUnderstand.hash;
+                    understand.understandingScore = score;
+                    understand.createdAt = saveUnderstand.createdAt;
+                    return understand;
+                });
+                await transactionalEntityManager.save(understandValues);
+            });
+            return "";
         } catch (error) {
-            console.error("Error saving data:", error);
+            console.error("Error executing transaction:", error);
+            return `Error executing transaction: ${error.message}`;
         }
     }
 

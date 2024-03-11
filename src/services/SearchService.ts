@@ -20,7 +20,8 @@ export class SearchService {
         const understandingScore: number = await ChatService.getUnderstandingScore(question, keyPhrases);
         // 検索履歴を保存
         const saveSearchQuestionInVo: SaveSearchQuestionInVo = { hash, question, response };
-        await SaveService.saveSearchQuestion(createdAt, saveSearchQuestionInVo, keyPhrases, understandingScore);
+        const saveUnderstand = { hash, understandingScore, createdAt };
+        await SaveService.saveSearchQuestion(createdAt, saveSearchQuestionInVo, keyPhrases, saveUnderstand);
         return { hash, response, keyPhrases };
     }
 }
