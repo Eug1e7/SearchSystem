@@ -5,15 +5,15 @@ export class Search {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ type: 'varchar', length: 255 })
     hash: string;
 
-    @Column()
+    @Column({ type: 'text' })
     question: string;
 
-    @Column()
+    @Column({ type: 'text' })
     response: string;
 
-    @Column()
+    @Column({ type: 'datetime' })
     createdAt: Date;
 }

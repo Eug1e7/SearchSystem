@@ -7,12 +7,12 @@ export class Understand {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ type: 'varchar', length: 255 })
     hash: string;
 
-    @Column()
+    @Column({ type: 'int' })
     understandingScore: number;
 
-    @Column()
+    @Column({ type: 'datetime' })
     createdAt: Date;
 }

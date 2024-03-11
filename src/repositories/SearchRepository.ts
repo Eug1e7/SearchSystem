@@ -31,13 +31,14 @@ export class SearchRepository {
                 await transactionalEntityManager.save(keywordValues);
 
                 // save3のロジック
-                const understandValues = saveUnderstand.understandingScores.map(score => {
+                const understandValues = saveUnderstand.understandingScore.map(understanding => {
                     const understand = new Understand();
                     understand.hash = saveUnderstand.hash;
-                    understand.understandingScore = score;
-                    understand.createdAt = saveUnderstand.createdAt;
+                    understand.understandingScore = understanding.score;
+                    understand.createdAt = new Date(saveUnderstand.createdAt);
                     return understand;
                 });
+                
                 await transactionalEntityManager.save(understandValues);
             });
             return "";

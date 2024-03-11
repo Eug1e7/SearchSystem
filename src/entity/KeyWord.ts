@@ -5,15 +5,15 @@ export class KeyWord {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ type: 'varchar', length: 255 })
     hash: string;
 
-    @Column()
+    @Column({ type: 'text' })
     text: string;
 
-    @Column()
+    @Column({ type: 'int' })
     score: number;
 
-    @Column()
+    @Column({ type: 'datetime' })
     createdAt: Date;
 }

@@ -4,6 +4,7 @@ import "dotenv/config";
 import { DataSource } from "typeorm";
 import { KeyWord } from "./entity/KeyWord";
 import { Search } from "./entity/Search";
+import { Understand } from "./entity/Understand";
 
 export const AppDataSource = new DataSource({
     type: "mysql",
@@ -14,7 +15,7 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_NAME,
     synchronize: true,
     logging: false,
-    entities: [Search, KeyWord],
+    entities: [Search, KeyWord, Understand],
     subscribers: [],
     migrations: [],
 });
