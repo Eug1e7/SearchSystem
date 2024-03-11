@@ -34,6 +34,7 @@ export class SearchRepository {
                 const understandValues = saveUnderstand.understandingScore.map(understanding => {
                     const understand = new Understand();
                     understand.hash = saveUnderstand.hash;
+                    understand.text = saveUnderstand.text;
                     understand.understandingScore = understanding.score;
                     understand.createdAt = new Date(saveUnderstand.createdAt);
                     return understand;

@@ -10,6 +10,9 @@ export class Understand {
     @Column({ type: 'varchar', length: 255 })
     hash: string;
 
+    @Column({ type: 'varchar', length: 255 })
+    text: string;
+
     @Column({ type: 'int' })
     understandingScore: number;
 

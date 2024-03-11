@@ -8,7 +8,7 @@ export class KeyWord {
     @Column({ type: 'varchar', length: 255 })
     hash: string;
 
-    @Column({ type: 'text' })
+    @Column({ type: 'varchar', length: 255 })
     text: string;
 
     @Column({ type: 'int' })
