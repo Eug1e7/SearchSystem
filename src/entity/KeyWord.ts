@@ -9,7 +9,7 @@ export class KeyWord {
     hash: string;
 
     @Column({ type: 'varchar', length: 255 })
-    text: string;
+    keyPhrase: string;
 
     @Column({ type: 'int' })
     score: number;

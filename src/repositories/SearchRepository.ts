@@ -23,7 +23,7 @@ export class SearchRepository {
                 const keywordValues = keyPhrases.map((kp) => {
                     let keyword = new KeyWord();
                     keyword.hash = kp.hash;
-                    keyword.text = kp.text;
+                    keyword.keyPhrase = kp.text;
                     keyword.score = kp.score;
                     keyword.createdAt = createdAt;
                     return keyword;
@@ -34,7 +34,7 @@ export class SearchRepository {
                 const understandValues = saveUnderstand.understandingScore.map(understanding => {
                     const understand = new Understand();
                     understand.hash = saveUnderstand.hash;
-                    understand.text = saveUnderstand.text;
+                    understand.keyPhrase = understanding.keyPhrase;
                     understand.understandingScore = understanding.score;
                     understand.createdAt = new Date(saveUnderstand.createdAt);
                     return understand;
