@@ -25,7 +25,8 @@ searchRouter.post("/search", async (req: Request, res: Response) => {
 // 検索履歴を取得
 searchRouter.get("/history", async (req: Request, res: Response) => {
     try {
-        const history = await GetService.getHistoryQuestions();
+        const { startDate, endDate } = req.query;
+        const history = await GetService.getHistoryQuestions(startDate as string, endDate as string);
         res.status(200).json(history);
     } catch (error) {
         res.status(500).json({ message: error.message });

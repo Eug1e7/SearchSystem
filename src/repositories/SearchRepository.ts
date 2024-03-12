@@ -1,5 +1,6 @@
 // Search-system\SearchSystemAPI\src\repositories\SearchRepository.ts
 
+import { Between } from "typeorm/find-options/operator/Between";
 import { AppDataSource } from "../DataSource";
 import { KeyPhrasesVo } from "../Vo/KeyPhrasesVo";
 import { SaveSearchQuestionInVo } from "../Vo/SaveSearchQuestionInVo";
@@ -50,10 +51,21 @@ export class SearchRepository {
     }
 
     // 検索履歴を取得
-    static async findAll(): Promise<string[]> {
+    static async findAllFiltered(startDate?: string, endDate?: string): Promise<Search[]> {
         const searchRepository = AppDataSource.getRepository(Search);
-        const searches = await searchRepository.find();
-        return searches.map((search) => search.question);
+        let whereCondition = {};
+
+        if (startDate && endDate) {
+            const endOfDay = new Date(endDate);
+            endOfDay.setHours(23, 59, 59);
+            
+            whereCondition = { createdAt: Between(new Date(startDate), endOfDay) };
+        }
+
+        return await searchRepository.find({
+            where: whereCondition,
+            order: { createdAt: 'DESC' }
+        });
     }
 
     // スコア以上のhashを取得
