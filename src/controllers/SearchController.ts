@@ -1,3 +1,5 @@
+// Search-system\SearchSystemAPI\src\controllers\SearchController.ts
+
 import { Request, Response, Router } from "express";
 import { GetScoreKeywordService } from "../services/GetScoreKeywordService";
 import { GetScoreQuestionService } from "../services/GetScoreQuestionService";
@@ -21,12 +23,12 @@ searchRouter.post("/search", async (req: Request, res: Response) => {
 });
 
 // 検索履歴を取得
-searchRouter.get("/searches", async (res: Response) => {
+searchRouter.get("/history", async (req: Request, res: Response) => {
     try {
-        const searches = await GetService.getSearchQuestions();
-        res.status(200).send(searches);
+        const history = await GetService.getHistoryQuestions();
+        res.status(200).json(history);
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json({ message: error.message });
     }
 });
 

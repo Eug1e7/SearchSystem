@@ -1,14 +1,15 @@
+// Search-system\SearchSystemAPI\src\services\GetService.ts
+
 import { SearchRepository } from "../repositories/SearchRepository";
 
 // データ取得のロジックを記述
 export class GetService {
     // 検索履歴を取得
-    static async getSearchQuestions(): Promise<string[]> {
-        try {
-            return await SearchRepository.findAll();
-        } catch (error) {
+    static async getHistoryQuestions(): Promise<any> {
+        return SearchRepository.findAll().catch(error => {
             console.error("Error getting data:", error);
-        }
+            throw new Error("Error getting history questions");
+        });
     }
 
     // スコア以上のhashを取得し、重複を排除
