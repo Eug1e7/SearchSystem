@@ -1,10 +1,10 @@
 // Search-system\SearchSystemAPI\src\controllers\SearchController.ts
 
 import { Request, Response, Router } from "express";
-import { GetScoreKeywordService } from "../services/GetScoreKeywordService";
-import { GetScoreQuestionService } from "../services/GetScoreQuestionService";
+import { GetQuestionService } from "../services/GetQuestionService";
 import { GetService } from "../services/GetService";
 import { SearchService } from "../services/SearchService";
+import { GetKeywordService } from "../services/GetKeywordService";
 
 export const searchRouter = Router();
 
@@ -44,7 +44,7 @@ searchRouter.get("/score_text", async (req: Request, res: Response) => {
     }
 
     try {
-        const texts = await GetScoreKeywordService.sortTextScore(score);
+        const texts = await GetKeywordService.sortTextScore(score);
         res.status(200).send(texts);
     } catch (error) {
         res.status(500).send(error.message);
@@ -62,7 +62,7 @@ searchRouter.get("/score_question", async (req: Request, res: Response) => {
     }
 
     try {
-        const questions = await GetScoreQuestionService.sortQuestionScore(score);
+        const questions = await GetQuestionService.sortQuestionScore(score);
         res.status(200).send(questions);
     } catch (error) {
         res.status(500).send(error.message);
@@ -81,6 +81,32 @@ searchRouter.get("/question", async (req: Request, res: Response) => {
 
     try {
         const questions = await GetService.getQuestions(keyword);
+        res.status(200).send(questions);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// Score以上の重要度を取得
+searchRouter.get("/importance_score", async (req: Request, res: Response) => {
+    // クエリパラメータからハッシュを取得
+    const hash = req.query.hash as string;
+
+    try {
+        const keywords = await GetService.sortByImportance(hash);
+        res.status(200).send(keywords);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// Score以上の理解度を含む質問を取得
+searchRouter.get("/understanding_score", async (req: Request, res: Response) => {
+    // クエリパラメータからハッシュを取得
+    const hash = req.query.hash as string;
+
+    try {
+        const questions = await GetService.sortByUnderstanding(hash);
         res.status(200).send(questions);
     } catch (error) {
         res.status(500).send(error.message);

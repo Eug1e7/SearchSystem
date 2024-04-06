@@ -1,3 +1,5 @@
+// Search-system\SearchSystemAPI\src\entity\KeyWord.ts
+
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()

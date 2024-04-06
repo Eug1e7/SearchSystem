@@ -1,6 +1,8 @@
 // Search-system\SearchSystemAPI\src\services\GetService.ts
 
+import { KeyWordRepository } from "../repositories/KeyWordRepository";
 import { SearchRepository } from "../repositories/SearchRepository";
+import { UnderstandRepository } from "../repositories/UnderstandRepository";
 
 // データ取得のロジックを記述
 export class GetService {
@@ -68,5 +70,29 @@ export class GetService {
         // hashからquestionを取得
         const questions = await SearchRepository.findQuestions(uniqueHashes);
         return questions;
+    }
+
+    // hashに基づき、重要度（score）でソートされたキーワードデータを取得
+    static async sortByImportance(hash: string): Promise<any[]> {
+        try {
+            // KeyWordRepositoryを使用してデータを取得
+            const keywords = await KeyWordRepository.findByHashSortedByScore(hash);
+            return keywords;
+        } catch (error) {
+            console.error("Error getting importance sorted data:", error);
+            throw new Error("Error getting sorted by importance data");
+        }
+    }
+
+    // hashに基づき、理解度（understandingScore）でソートされたデータを取得
+    static async sortByUnderstanding(hash: string): Promise<any[]> {
+        try {
+            // UnderstandRepositoryを使用してデータを取得
+            const understands = await UnderstandRepository.findByHashSortedByUnderstandingScore(hash);
+            return understands;
+        } catch (error) {
+            console.error("Error getting understanding sorted data:", error);
+            throw new Error("Error getting sorted by understanding data");
+        }
     }
 }
