@@ -52,15 +52,19 @@ export class SearchRepository {
     }
 
     // 検索履歴を取得
-    static async findAllFiltered(startDate?: string, endDate?: string): Promise<Search[]> {
+    static async findAllFiltered(startDate?: string, endDate?: string, category?: string): Promise<Search[]> {
         const searchRepository = AppDataSource.getRepository(Search);
         let whereCondition = {};
 
         if (startDate && endDate) {
             const endOfDay = new Date(endDate);
             endOfDay.setHours(23, 59, 59);
+            whereCondition["createdAt"] = Between(new Date(startDate), endOfDay);
+        }
 
-            whereCondition = { createdAt: Between(new Date(startDate), endOfDay) };
+        // カテゴリーフィルタリングの条件を追加
+        if (category && category !== "") {
+            whereCondition["category"] = category;
         }
 
         return await searchRepository.find({

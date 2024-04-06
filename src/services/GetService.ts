@@ -5,8 +5,8 @@ import { SearchRepository } from "../repositories/SearchRepository";
 // データ取得のロジックを記述
 export class GetService {
     // 検索履歴を取得
-    static async getHistoryQuestions(startDate?: string, endDate?: string) {
-        return SearchRepository.findAllFiltered(startDate, endDate).catch(error => {
+    static async getHistoryQuestions(startDate?: string, endDate?: string, category?: string) {
+        return SearchRepository.findAllFiltered(startDate, endDate, category).catch(error => {
             console.error("Error getting data:", error);
             throw new Error("Error getting history questions");
         });
