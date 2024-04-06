@@ -107,16 +107,16 @@ export class SearchRepository {
         const queryBuilder = keywordRepository
             .createQueryBuilder("keyword")
             .select("keyword.hash")
-            .where("LOWER(keyword.text) LIKE LOWER(:keyword)", { keyword: `%${keyword}%` });
-
+            .where("LOWER(keyword.keyPhrase) LIKE LOWER(:keyword)", { keyword: `%${keyword}%` });
+    
         const sql = queryBuilder.getSql();
         const parameters = queryBuilder.getParameters();
         console.log("Executing SQL:", sql, "with parameters:", parameters);
-
+    
         const hashes = await queryBuilder.getRawMany();
         console.log("Hashes:", hashes);
         return hashes.map((hash) => hash.keyword_hash);
-    }
+    }    
 
     // hashに対応するquestionを取得
     static async findQuestions(hashes: string[]): Promise<string[]> {
