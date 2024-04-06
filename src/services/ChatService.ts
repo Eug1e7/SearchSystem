@@ -115,4 +115,46 @@ export class ChatService {
 
         return scores;
     }
+
+    // 質問のカテゴリーを分類
+    static async classifyQuestion(question: string): Promise<string> {
+        const categories = {
+            product: ["製品", "仕様", "機能"],
+            price: ["価格", "値段", "コスト"],
+            support: ["サポート", "保証", "修理"],
+            other: [], // 'その他'はデフォルトのカテゴリーとして扱う
+        };
+
+        let category = "その他"; // デフォルトのカテゴリー
+
+        // '製品'カテゴリーの判定
+        for (const keyword of categories.product) {
+            if (question.includes(keyword)) {
+                category = "製品に関する質問";
+                break;
+            }
+        }
+
+        // '価格'カテゴリーの判定
+        if (category === "その他") {
+            for (const keyword of categories.price) {
+                if (question.includes(keyword)) {
+                    category = "価格に関する質問";
+                    break;
+                }
+            }
+        }
+
+        // 'サポート'カテゴリーの判定
+        if (category === "その他") {
+            for (const keyword of categories.support) {
+                if (question.includes(keyword)) {
+                    category = "サポートに関する質問";
+                    break;
+                }
+            }
+        }
+
+        return category;
+    }
 }

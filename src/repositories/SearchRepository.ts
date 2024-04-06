@@ -17,6 +17,7 @@ export class SearchRepository {
                 saveSearchQuestion.hash = saveSearchQuestionInVo.hash;
                 saveSearchQuestion.question = saveSearchQuestionInVo.question;
                 saveSearchQuestion.response = saveSearchQuestionInVo.response;
+                saveSearchQuestion.category = saveSearchQuestionInVo.category;
                 saveSearchQuestion.createdAt = createdAt;
                 await transactionalEntityManager.save(saveSearchQuestion);
 
@@ -32,7 +33,7 @@ export class SearchRepository {
                 await transactionalEntityManager.save(keywordValues);
 
                 // save3のロジック
-                const understandValues = saveUnderstand.understandingScore.map(understanding => {
+                const understandValues = saveUnderstand.understandingScore.map((understanding) => {
                     const understand = new Understand();
                     understand.hash = saveUnderstand.hash;
                     understand.keyPhrase = understanding.keyPhrase;
@@ -40,7 +41,7 @@ export class SearchRepository {
                     understand.createdAt = new Date(saveUnderstand.createdAt);
                     return understand;
                 });
-                
+
                 await transactionalEntityManager.save(understandValues);
             });
             return "";
@@ -58,13 +59,13 @@ export class SearchRepository {
         if (startDate && endDate) {
             const endOfDay = new Date(endDate);
             endOfDay.setHours(23, 59, 59);
-            
+
             whereCondition = { createdAt: Between(new Date(startDate), endOfDay) };
         }
 
         return await searchRepository.find({
             where: whereCondition,
-            order: { createdAt: 'DESC' }
+            order: { createdAt: "DESC" },
         });
     }
 

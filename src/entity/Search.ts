@@ -14,6 +14,9 @@ export class Search {
     @Column({ type: 'text' })
     response: string;
 
+    @Column({ type: 'varchar', length: 255 })
+    category: string;
+
     @Column({ type: 'datetime' })
     createdAt: Date;
 }

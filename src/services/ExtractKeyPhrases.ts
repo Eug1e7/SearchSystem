@@ -4,7 +4,7 @@ import { KeyPhrasesVo } from "../Vo/KeyPhrasesVo";
 
 export class ExtractKeyPhrases {
     // キーフレーズを抽出
-    static async extractKeyPhrases(question: string, hash: string): Promise<KeyPhrasesVo > {
+    static async extractKeyPhrases(question: string, hash: string): Promise<KeyPhrasesVo> {
         const Authorization = process.env.YAHOO_API_KEY;
         const url = "https://jlp.yahooapis.jp/KeyphraseService/V2/extract?appid=" + Authorization;
         const data = {
@@ -26,7 +26,7 @@ export class ExtractKeyPhrases {
             // レスポンスの構造を確認
             if (response && response.data && response.data.result && response.data.result.phrases) {
                 const phrases = response.data.result.phrases;
-                const keyPhrases: KeyPhrasesVo  = phrases.map((phrase) => ({
+                const keyPhrases: KeyPhrasesVo = phrases.map((phrase) => ({
                     text: phrase.text,
                     score: phrase.score,
                     hash: response.data.id,

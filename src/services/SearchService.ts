@@ -18,8 +18,10 @@ export class SearchService {
         const keyPhrases: KeyPhrasesVo = await ExtractKeyPhrases.extractKeyPhrases(question, hash);
         // 理解度スコアを取得
         const understandingScore: number = await ChatService.getUnderstandingScore(question, keyPhrases);
+        // 質問のカテゴリーを分類
+        const category = await ChatService.classifyQuestion(question);
         // 検索履歴を保存
-        const saveSearchQuestionInVo: SaveSearchQuestionInVo = { hash, question, response };
+        const saveSearchQuestionInVo: SaveSearchQuestionInVo = { hash, question, response, category };
         const saveUnderstand = { hash, understandingScore, createdAt };
         await SaveService.saveSearchQuestion(createdAt, saveSearchQuestionInVo, keyPhrases, saveUnderstand);
         return { hash, response, keyPhrases };
